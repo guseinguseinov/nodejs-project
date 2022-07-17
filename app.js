@@ -1,41 +1,45 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+import { engine } from 'express-handlebars';
 
+dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3000;
 
+// middleware
+app.use(express.static('public'));
+
+// view engine
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set('views', './views');
+
+// routers
 app.get('/', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'index.html'));
+    res.render('index');
 });
 
 app.get('/about', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'about.html'));
+    res.render('about');
 });
 
 app.get('/blog', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'blog.html'));
+    res.render('blog');
 });
 
 app.get('/contact', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'contact.html'));
+    res.render('contact');
 });
 
 app.get('/blog-single', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'blog-single.html'));
+    res.render('blog-single');
 });
 
-app.get('/users/:userID/movies/:moviesID', (req, res) => {
-    res.send(
-        `
-        <h1> User name : ${req.params.userID}</h1>
-        <h1> Movie name : ${req.params.moviesID}</h1>
-        `
-    );
-});
 
 app.listen(port, () => {
     console.log('Server starts at http://localhost:' + port);
