@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import { engine } from 'express-handlebars';
+import mongoose from 'mongoose';
 
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
@@ -18,6 +19,9 @@ app.use(express.static('public'));
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
 app.set('views', './views');
+
+
+await mongoose.connect('mongodb://localhost/nodeblog_db');
 
 // routers
 app.get('/', (req, res) => {
